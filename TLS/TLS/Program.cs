@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TLS
 {
@@ -14,17 +15,38 @@ namespace TLS
             //Open the file to read from.
             string readText = File.ReadAllText(path);
 
-            int counter = 0;
+            // Define a regular expression for repeated words.
+            Regex rx = new Regex(@"tra",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            for (int i = 0; i < readText.Length; i++)
+            // Find matches.
+            MatchCollection matches = rx.Matches(readText);
+
+            // Report the number of matches found.
+            Console.WriteLine("{0} matches found: ",
+                matches.Count);
+
+            // Report on each match.
+            foreach (Match match in matches)
             {
-                if (readText[i] == 't' && readText[i + 1] == 'r' && readText[i + 2] == 'a')
-                {
-                    counter++;
-                }
+                GroupCollection groups = match.Groups;
+                Console.WriteLine("'{0}' repeated at positions {1} and {2}",
+                    groups["word"].Value,
+                    groups[0].Index,
+                    groups[1].Index);
             }
 
-            Console.WriteLine(counter);
+            //int counter = 0;
+
+            //for (int i = 0; i < readText.Length; i++)
+            //{
+            //    if (readText[i] == 't' && readText[i + 1] == 'r' && readText[i + 2] == 'a')
+            //    {
+            //        counter++;
+            //    }
+            //}
+
+            //Console.WriteLine(counter);
             Console.ReadLine();
         }
     }
