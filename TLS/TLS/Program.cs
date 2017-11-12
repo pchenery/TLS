@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace TLS
@@ -27,11 +24,22 @@ namespace TLS
              Console.WriteLine("{0} matches found: ",
                  matches.Count);
 
-            var dict = Regex.Matches(readText, @"\w{3}")
-                .Cast<Match>().GroupBy(o => o.Value)
+            //@"(?i:\w{3})
+
+            //string strippedText = String.Join("", readText.Where(c => !char.IsWhiteSpace(c)));
+
+            var dict = Regex.Matches(readText, @"\w{3}", RegexOptions.Compiled | RegexOptions.IgnoreCase)
+                .Cast<Match>()
+                .GroupBy(o => o.Value.ToLower())
                 .ToDictionary(o => o.Key, o => o.Count());
- 
+
+            foreach (var d in dict)
+            {
+                Console.WriteLine(d.Value + " " + d.Key);
+            }
+
             Console.WriteLine(dict["tra"]);
+            Console.WriteLine(dict["the"]);
             Console.WriteLine(dict["pre"]);
             Console.ReadLine();
 
